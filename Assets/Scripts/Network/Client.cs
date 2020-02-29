@@ -19,22 +19,11 @@ public class Client : MonoBehaviour
     public TcpConnectedClient connectedClient { get; private set; }
     public IEnumerator startGameCoroutine;
 
+    public CheckerColor UserCheckerColor { get; set; }
+
     public bool StartCommand { get; set; }
     public LobbyInfo lobbyInfo;
     public string enemyName;
-    public CheckerColor UserCheckerColor { get; set; }
-
-    
-    public bool TurnCommand { get; set; }
-    public TurnInfo TurnInfo { get; set; }
-
-
-    public bool SuperCheckerCommand { get; set; }
-    public SuperCheckerInfo SuperChecker { get; set; }
-
-
-    public bool GameEndCommand { get; set; }
-    public VictoryInfo VictoryInfo { get; set; }
 
     private void Awake()
     {
@@ -137,12 +126,12 @@ public class Client : MonoBehaviour
         StartCommand = false;
         lobbyInfo = null;
         enemyName = string.Empty;
-        TurnCommand = false;
-        TurnInfo = null;
-        SuperCheckerCommand = false;
-        SuperChecker = null;
-        GameEndCommand = false;
-        VictoryInfo = null;
+        //TurnCommand = false;
+        //TurnInfo = null;
+        //SuperCheckerCommand = false;
+        //SuperChecker = null;
+        //GameEndCommand = false;
+        //VictoryInfo = null;
 
         connectedClient.currentUser = null;
         connectedClient.connection?.Close();        

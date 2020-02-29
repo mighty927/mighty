@@ -87,6 +87,12 @@ public class TcpConnectedClient
                     Debug.Log(userInfo.Token);
                 }
                 break;
+            case nameof(CancelSearchInfo):
+                {
+                    //CANCEL SEARCH
+                    UserContoller.instance.cancelCommand = true;
+                }
+                break;
             case nameof(LobbyInfo):
                 {
 
@@ -116,22 +122,22 @@ public class TcpConnectedClient
                     var turnInfo = JsonConvert.DeserializeObject<TurnInfo>(jsonMessage.Data);
                     Debug.Log(turnInfo.Square.Id + $"Position:{turnInfo.Square.Position.X}, {turnInfo.Square.Position.Y}");
 
-                    Client.instance.TurnInfo = turnInfo;
-                    Client.instance.TurnCommand = true;
+                    NetworkController.instance.TurnInfo = turnInfo;
+                    NetworkController.instance.TurnCommand = true;
                 }
                 break;
             case nameof(SuperCheckerInfo):
                 {
                     var superCheckerInfo = JsonConvert.DeserializeObject<SuperCheckerInfo>(jsonMessage.Data);
-                    Client.instance.SuperChecker = superCheckerInfo;
-                    Client.instance.SuperCheckerCommand = true;
+                    NetworkController.instance.SuperChecker = superCheckerInfo;
+                    NetworkController.instance.SuperCheckerCommand = true;
                 }
                 break;
             case nameof(VictoryInfo):
                 {
                     var victoryInfo = JsonConvert.DeserializeObject<VictoryInfo>(jsonMessage.Data);
-                    Client.instance.GameEndCommand = true;
-                    Client.instance.VictoryInfo = victoryInfo;
+                    NetworkController.instance.GameEndCommand = true;
+                    NetworkController.instance.VictoryInfo = victoryInfo;
                     UserContoller.instance.endGameCoroutine = NetworkController.instance.EndGameServerResponse();
                 }
                 break;

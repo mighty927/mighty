@@ -12,8 +12,10 @@ public class UserContoller : MonoBehaviour
     public Text UsernameText;
     public Text BeetText;
 
-    public UserInfo userInfo;
-    
+    public UserInfo userInfo { get; set; }
+
+    public bool cancelCommand;
+
     public IEnumerator endGameCoroutine;
 
     private void Awake()

@@ -62,7 +62,7 @@ public class WinController : MonoBehaviour
         UserContoller.instance.UsernameText = null;
         Client.instance.lobbyInfo = null;
         Client.instance.StartCommand = false;
-        Client.instance.GameEndCommand = false;
+        NetworkController.instance.GameEndCommand = false;
         GameControllerComponent.IsGameStart = false;
     }
 

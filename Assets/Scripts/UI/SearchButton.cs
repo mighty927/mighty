@@ -1,4 +1,5 @@
 ﻿using Checkers;
+using NetMessaging;
 using NetMessaging.GameLogic;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,14 +13,19 @@ public class SearchButton : MonoBehaviour
     public GameObject pvpObject;
     public GameObject bsObject;
     public Text timerText;
+
+
     public Button miningButtonObject;
     public Button pvpButtonObject;
+    public GameObject cancelObject;
+    public GameObject backObject;
 
     public GameMode ModeType;
 
     private void Awake()
     {
         SearchInfo(false, false, true, false);
+        OffModeButtons(true, true, false);
     }
 
     public void OnSearchClick()
@@ -35,6 +41,7 @@ public class SearchButton : MonoBehaviour
                     Client.instance.isSearch = true;
                     //START PLAY MINING
                     SearchInfo(true, false, false, true);
+                    OffModeButtons(false, false, true);
                     //pvpButtonObject.enabled = false; ВЫКЛЮЧИТЬ АНИМАТОРЫ
                     Client.instance.SendGameInfo(GameMode.Mining, UserContoller.instance.userInfo.Token);
                     Client.instance.startGameCoroutine = WaitGameServerResponse();
@@ -49,6 +56,7 @@ public class SearchButton : MonoBehaviour
                     Client.instance.isSearch = true;
                     //START PLAY PVp
                     SearchInfo(false, true, false, true);
+                    OffModeButtons(false, false, true);
                     //miningButtonObject.enabled = false;
                     Client.instance.SendGameInfo(GameMode.PVP, UserContoller.instance.userInfo.Token);
                     Client.instance.startGameCoroutine = WaitGameServerResponse();
@@ -59,6 +67,13 @@ public class SearchButton : MonoBehaviour
         }
     }
 
+    public void OnCancelClick()
+    {
+        //Отправить запрос на отмену
+        var message = Client.MakeJsonMessage(nameof(CancelSearchInfo), new CancelSearchInfo { Username = UserContoller.instance.userInfo.UserName });
+        Client.instance.connectedClient.Send(message);
+    }
+
     private void Update()
     {
 
@@ -66,6 +81,13 @@ public class SearchButton : MonoBehaviour
         {
             Client.instance.timeStart += Time.deltaTime;
             timerText.text = Mathf.Round(Client.instance.timeStart).ToString();
+        }
+
+        if(UserContoller.instance.cancelCommand)
+        {
+            UserContoller.instance.cancelCommand = false;
+            SearchInfo(false, false, true, false);
+            OffModeButtons(true, true, false);
         }
     }
 
@@ -75,6 +97,14 @@ public class SearchButton : MonoBehaviour
         pvpObject.SetActive(pvp);
         bsObject.SetActive(bs);
         timerText.gameObject.SetActive(timer);
+    }
+
+    private void OffModeButtons(bool mining, bool pvp, bool cancel)
+    {
+        miningButtonObject.enabled = mining;
+        pvpButtonObject.enabled = pvp;
+        cancelObject.SetActive(cancel);
+        backObject.SetActive(!cancel);
     }
 
 

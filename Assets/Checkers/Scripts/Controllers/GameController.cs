@@ -16,7 +16,7 @@ namespace Checkers
 		[Header("States: ")]
 		public bool IsGameStart;
 		public UserColor CurrentUserColor;
-		
+
 
 		[Space]
 		public Core CoreInstance;
@@ -64,7 +64,7 @@ namespace Checkers
 					}
 				}
 
-				if (Client.instance?.GameEndCommand == true)
+				if (NetworkController.instance?.GameEndCommand == true)
 				{
 					if (UserContoller.instance.endGameCoroutine != null)
 					{
@@ -93,10 +93,12 @@ namespace Checkers
 
 			if (firstTurnNamePlayer.Equals(me))
 			{
+				Client.instance.UserCheckerColor = CheckerColor.White;
 				BoardViewCompoennt.SetColorPlayer(UserColor.White);
 			}
 			else
 			{
+				Client.instance.UserCheckerColor = CheckerColor.Black;
 				BoardViewCompoennt.SetColorPlayer(UserColor.Black);
 
 				if (_moveCoroutine != null)

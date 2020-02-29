@@ -12,6 +12,18 @@ public class NetworkController : MonoBehaviour
 
     public GameController GameControllerComponent;
 
+    public bool TurnCommand { get; set; }
+    public TurnInfo TurnInfo { get; set; }
+
+
+    public bool SuperCheckerCommand { get; set; }
+    public SuperCheckerInfo SuperChecker { get; set; }
+
+
+    public bool GameEndCommand { get; set; }
+    public VictoryInfo VictoryInfo { get; set; }
+
+
     private void Awake()
     {
         //DontDestroyOnLoad(gameObject);
@@ -56,7 +68,7 @@ public class NetworkController : MonoBehaviour
 
     public void TurnCheckerFromServer(TurnInfo turnInfo)
     {
-        Client.instance.TurnCommand = false;
+        TurnCommand = false;
 
 
         var square = GameControllerComponent.CoreInstance._squaresData[turnInfo.Square.Id];
@@ -97,22 +109,22 @@ public class NetworkController : MonoBehaviour
 
     public void BecomeSuperCheckerFromServer(SuperCheckerInfo superChecker)
     {
-        Client.instance.SuperCheckerCommand = false;
+        SuperCheckerCommand = false;
         GameControllerComponent.CoreInstance.BecomeSuperCheckAsync(superChecker.Id);
     }
 
     public IEnumerator EndGameServerResponse()
     {
-        yield return new WaitUntil(() => Client.instance.GameEndCommand);
+        yield return new WaitUntil(() => GameEndCommand);
 
-        if (Client.instance.VictoryInfo != null && Client.instance.GameEndCommand)
+        if (VictoryInfo != null && GameEndCommand)
         {
             GameControllerComponent.IsGameStart = false;
-            Client.instance.GameEndCommand = false;
+            GameEndCommand = false;
             GameControllerComponent.CoreInstance.GameEnd = true;
-            UiViewController.Instance.ShowWinMessage(Client.instance.VictoryInfo.VictoryName);
+            UiViewController.Instance.ShowWinMessage(VictoryInfo.VictoryName);
 
-            if (Client.instance.VictoryInfo.VictoryName == Client.instance.connectedClient.currentUser.UserName)
+            if (VictoryInfo.VictoryName == Client.instance.connectedClient.currentUser.UserName)
             {
                 AudioController.Instance.PlayOneShotAudio(AudioController.AudioType.Win);
             }
