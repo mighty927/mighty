@@ -31,7 +31,7 @@ public class WinController : MonoBehaviour
         //SearchInfo(true, false, false, true);
         //pvpButtonObject.enabled = false; ВЫКЛЮЧИТЬ АНИМАТОРЫ
         Client.instance.SendGameInfo(GameMode.Mining, UserContoller.instance.userInfo.Token);
-        UserContoller.instance.startGameCoroutine = WaitGameServerResponse();
+        Client.instance.startGameCoroutine = WaitGameServerResponse();
     }
 
     private IEnumerator WaitGameServerResponse()
@@ -67,9 +67,7 @@ public class WinController : MonoBehaviour
     }
 
     public void OnBackMenuClick()
-    {
-        Destroy(UserContoller.instance.gameObject);
-
+    {       
         var doTween = FindObjectOfType<DOTweenComponent>();
         Destroy(doTween?.gameObject);
 

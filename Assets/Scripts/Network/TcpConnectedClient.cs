@@ -30,7 +30,7 @@ public class TcpConnectedClient
     {
         get
         {
-            return connection.GetStream();
+            return connection?.GetStream();
         }
     }
     #endregion
@@ -219,7 +219,22 @@ public class TcpConnectedClient
 
     internal void EndConnect(IAsyncResult ar)
     {
-        connection.EndConnect(ar);
+        try
+        {
+            connection.EndConnect(ar);
+
+            if (stream.CanRead)
+                stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
+            else
+            {
+                Debug.Log("Ошибка чтения в конец подключения");
+                Client.instance.OnDisconnect();
+            }
+        }
+        catch
+        {
+            throw new SocketException();
+        }
 
         //Когда подключились отдаем инфу
 
@@ -229,13 +244,7 @@ public class TcpConnectedClient
         //var message = Client.MakeJsonMessage(nameof(UserInfo), userInfo);
 
         //Send(message);
-        if(stream.CanRead)
-            stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
-        else
-        {
-            Debug.Log("Ошибка чтения в конец подключения");
-            Client.instance.OnDisconnect();
-        }
+        
     }
     #endregion
 

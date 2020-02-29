@@ -37,7 +37,7 @@ public class SearchButton : MonoBehaviour
                     SearchInfo(true, false, false, true);
                     //pvpButtonObject.enabled = false; ВЫКЛЮЧИТЬ АНИМАТОРЫ
                     Client.instance.SendGameInfo(GameMode.Mining, UserContoller.instance.userInfo.Token);
-                    UserContoller.instance.startGameCoroutine = WaitGameServerResponse();
+                    Client.instance.startGameCoroutine = WaitGameServerResponse();
                 }
                 break;
             case GameMode.PVP:
@@ -51,7 +51,7 @@ public class SearchButton : MonoBehaviour
                     SearchInfo(false, true, false, true);
                     //miningButtonObject.enabled = false;
                     Client.instance.SendGameInfo(GameMode.PVP, UserContoller.instance.userInfo.Token);
-                    UserContoller.instance.startGameCoroutine = WaitGameServerResponse();
+                    Client.instance.startGameCoroutine = WaitGameServerResponse();
                 }
                 break;
             default:

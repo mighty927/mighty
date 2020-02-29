@@ -17,7 +17,7 @@ public class Client : MonoBehaviour
     public bool isSearch;
 
     public TcpConnectedClient connectedClient { get; private set; }
-    //public TcpClient TcpClient { get; private set; }
+    public IEnumerator startGameCoroutine;
 
     public bool StartCommand { get; set; }
     public LobbyInfo lobbyInfo;
@@ -39,12 +39,17 @@ public class Client : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
+        Connect();
+        
+        //SceneManager.LoadScene(1);
+    }
 
+    public void Connect()
+    {
         instance = this;
         var TcpClient = new TcpClient();
         connectedClient = new TcpConnectedClient(TcpClient);
-        TcpClient.BeginConnect("127.0.0.1", 6323, (ar) => connectedClient.EndConnect(ar), null); //13.53.190.82
-        //SceneManager.LoadScene(1);
+        TcpClient.BeginConnect("192.168.0.107", 6323, (ar) => connectedClient.EndConnect(ar), null); //13.53.190.82 //
     }
 
     public void Update()
@@ -65,13 +70,34 @@ public class Client : MonoBehaviour
 
         //if (gameEndCommand && victoryInfo != null)
         //    NetworkController.instance.EndGameFromServer(victoryInfo);
+
+        if (isSearch == true)
+        {
+            if (StartCommand == true)
+            {
+                if (startGameCoroutine != null)
+                {
+                    StopCoroutine(startGameCoroutine);
+                    StartCoroutine(startGameCoroutine);
+                }
+            }
+        }
     }
 
 
     public void SendLogin(LoginInfo loginInfo)
     {
         var message = MakeJsonMessage(nameof(LoginInfo), loginInfo);
-        connectedClient.Send(message);
+        connectedClient?.Send(message);
+    }
+
+    public void SendLogout()
+    {
+        if (connectedClient?.currentUser != null)
+        {
+            var message = MakeJsonMessage(nameof(LogoutInfo), new LogoutInfo { Token = connectedClient.currentUser.Token });
+            connectedClient?.Send(message);
+        }
     }
 
     public void SendGameInfo(GameMode gameMode, string token)
@@ -83,7 +109,7 @@ public class Client : MonoBehaviour
         };
 
         var message = MakeJsonMessage(nameof(GameInfo), gameInfo);
-        connectedClient.Send(message);
+        connectedClient?.Send(message);
     }
 
     public static string MakeJsonMessage(string type, object data)
@@ -100,12 +126,33 @@ public class Client : MonoBehaviour
         return JsonConvert.SerializeObject(value);
     }
 
-
     public void OnDisconnect()
     {
         Destroy(gameObject);
         connectedClient?.Close();
     }
 
+    public void ResetClient()
+    {
+        StartCommand = false;
+        lobbyInfo = null;
+        enemyName = string.Empty;
+        TurnCommand = false;
+        TurnInfo = null;
+        SuperCheckerCommand = false;
+        SuperChecker = null;
+        GameEndCommand = false;
+        VictoryInfo = null;
+
+        connectedClient.currentUser = null;
+        connectedClient.connection?.Close();        
+    }
+
+    private void OnApplicationQuit()
+    {
+        SendLogout();
+        if(connectedClient?.connection?.Connected == true)
+            connectedClient?.Close();
+    }
 
 }

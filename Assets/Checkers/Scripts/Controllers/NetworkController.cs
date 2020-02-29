@@ -12,17 +12,11 @@ public class NetworkController : MonoBehaviour
 
     public GameController GameControllerComponent;
 
-
-    //private const string HOSTADDRESS = "127.0.0.1";
-    //private const int PORT = 6322;
-
     private void Awake()
     {
         //DontDestroyOnLoad(gameObject);
         instance = this;
     }
-
-
     //public void StartPVPGame(string me, string enemy, string firstTurnNamePlayer)
     //{
     //    Client.instance.StartCommand = false;
@@ -128,61 +122,4 @@ public class NetworkController : MonoBehaviour
             }
         }
     }
-
-    #region Buttons
-    //public void OnMiningClicked()
-    //{
-    //    try
-    //    {
-    //        Panel.SetActive(false);
-
-    //        //Проверка на подключение
-
-
-    //        //var client = Instantiate(ClientPrefab).GetComponent<Client>();
-    //        //client.connectedClient.currentUser.Name = "Unity" + new System.Random().Next(11111, 99999);
-    //        //client.connectedClient.currentUser.GameMode = GameMode.Mining;
-    //        //if (string.IsNullOrEmpty(client.connectedClient.currentUser.Name))
-    //        //    client.connectedClient.currentUser.Name = "Unity";
-
-    //        GameControllerComponent.ChooseMode(GameMode.Mining);
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log(e.Message);
-    //    }
-    //}
-
-    //public void OnPVPClicked()
-    //{      
-
-    //    try
-    //    {
-    //        Panel.SetActive(false);
-
-    //        //Проверка на подключение
-
-    //        //var client = Instantiate(ClientPrefab).GetComponent<Client>();
-    //        //client.connectedClient.currentUser.Name = "Unity" + new System.Random().Next(11111, 99999);
-    //        //if (string.IsNullOrEmpty(client.connectedClient.currentUser.Name))
-    //        //    client.connectedClient.currentUser.Name = "Unity";
-
-    //        GameControllerComponent.ChooseMode(GameMode.PVP);
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log(e.Message);
-    //    }
-    //}
-
-    public void OnCancelButton()
-    {
-
-        Client client = FindObjectOfType<Client>();
-        if (client != null)
-            Destroy(client.gameObject);
-
-
-    }
-    #endregion
 }

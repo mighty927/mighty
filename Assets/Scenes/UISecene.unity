@@ -3554,8 +3554,7 @@ PrefabInstance:
     - target: {fileID: 114611863077009110, guid: bce1702a2d4de3a46a2c9f8325f10233,
         type: 3}
       propertyPath: m_Text
-      value: "\u0412\u042B \u0423\u0412\u0415\u0420\u0415\u041D\u042B, \u0427\u0422\u041E
-        \u0425\u041E\u0422\u0418\u0422\u0415 \u0412\u042B\u0419\u0422\u0418?"
+      value: "\u0412\u042B\u0419\u0422\u0418 \u0418\u0417 \u0410\u041A\u041A\u0410\u0423\u041D\u0422\u0410?"
       objectReference: {fileID: 0}
     - target: {fileID: 114611863077009110, guid: bce1702a2d4de3a46a2c9f8325f10233,
         type: 3}
@@ -3688,6 +3687,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_EffectColor.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114816907350419176, guid: bce1702a2d4de3a46a2c9f8325f10233,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 933137413}
+    - target: {fileID: 114816907350419176, guid: bce1702a2d4de3a46a2c9f8325f10233,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnLogout
       objectReference: {fileID: 0}
     - target: {fileID: 114859603571917720, guid: bce1702a2d4de3a46a2c9f8325f10233,
         type: 3}

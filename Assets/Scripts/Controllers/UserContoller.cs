@@ -13,14 +13,13 @@ public class UserContoller : MonoBehaviour
     public Text BeetText;
 
     public UserInfo userInfo;
-
-    public IEnumerator startGameCoroutine;
+    
     public IEnumerator endGameCoroutine;
 
     private void Awake()
     {
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         userInfo = Client.instance.connectedClient.currentUser;
     }
    
@@ -41,17 +40,16 @@ public class UserContoller : MonoBehaviour
                         BeetText.text = userInfo.BeetCount.ToString();
             }
         }
+        
+    }
 
-        if (Client.instance?.isSearch == true)
-        {
-            if (Client.instance?.StartCommand == true)
-            {
-                if (startGameCoroutine != null)
-                {
-                    StopCoroutine(startGameCoroutine);
-                    StartCoroutine(startGameCoroutine);
-                }
-            }
-        }
+    public void OnLogout()
+    {
+        Client.instance.SendLogout();
+        Client.instance.ResetClient();
+        Destroy(Client.instance.gameObject);
+        //SEND LOGOUT
+
+        SceneManager.LoadScene(0);
     }
 }

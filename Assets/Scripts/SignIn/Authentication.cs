@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using NetMessaging;
 using System;
 using UnityEngine.SceneManagement;
+using System.Net.Sockets;
 
 public class Authentication : MonoBehaviour
 {
@@ -48,11 +49,11 @@ public class Authentication : MonoBehaviour
         }
         else
         {
-            if (timeStart >= 10.0f)
+            if (timeStart >= 120.0f)
             {
-                displayError = "Не удалось подключиться к серверу BS Games";
-                var oldClient = FindObjectOfType<Client>();
-                Destroy(oldClient?.gameObject);
+                displayError = "Тайм-аут подключения к серверу BS Games";
+                //var oldClient = FindObjectOfType<Client>();
+                //Destroy(oldClient?.gameObject);
                 ResetConnection();
                 return;
             }
@@ -121,21 +122,28 @@ public class Authentication : MonoBehaviour
                 oldClient.SendLogin(loginInfo);
                 authenticateCoroutine = WaitLoginRequest();
             }
-            else
-            {
+            else if(oldClient?.connectedClient?.connection?.Connected == true)
+            {                
                 oldClient.SendLogin(loginInfo);
                 authenticateCoroutine = WaitLoginRequest();
             }
+            else
+            {
+                Debug.Log("Бля чет подключение наебнулось");
+            }
         }
-        catch (Exception e)
+        catch(SocketException)
         {
-            displayError = e.Message;
+            displayError = "Удаленный сервер не доступен";
+        }
+        catch(InvalidOperationException)
+        {
+            displayError = "Не удалось подключиться, повторите еще раз";
         }
 
         if (authenticateCoroutine == null)
         {
-            displayError = "Сервер не доступен, проверьте ваше соединение с интернетом";
-            Destroy(oldClient.gameObject);
+            //displayError = "Сервер не доступен, проверьте ваше соединение с интернетом";            
             awaiter = false;
         }
 
@@ -157,6 +165,10 @@ public class Authentication : MonoBehaviour
         StopAllCoroutines();
         awaiter = false;
         timeStart = 0f;
+        authenticateCoroutine = null;
+        //Client.instance?.connectedClient.connection?.Close();
+        //if(Client.instance?.gameObject != null)
+        //    Destroy(Client.instance?.gameObject);
         //var clients = FindObjectsOfType<Client>();
 
         //foreach (var client in clients)
